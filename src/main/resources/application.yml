@@ -12,3 +12,13 @@ spring:
   jpa:
     open-in-view: false
     defer-datasource-initialization: true
+
+security:
+  oauth2:
+    client:
+      client-id: ${CLIENT_ID:pegasus}
+      client-secret: ${CLIENT_SECRET:pegasus06052022}
+
+jwt:
+  secret: ${JWT_SECRET:PEGASUS-PETSHOP-SECRET}
+  duration: ${JWT_DURATION:14400}
