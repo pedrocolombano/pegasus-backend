@@ -1,6 +1,7 @@
 package br.com.lacostech.pegasusbackend.config;
 
 import br.com.lacostech.pegasusbackend.components.JwtTokenEnhancer;
+import br.com.lacostech.pegasusbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final JwtTokenStore tokenStore;
     private final JwtTokenEnhancer tokenEnhancer;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @Value(value = "${security.oauth2.client.client-id}")
     private String clientId;
@@ -39,12 +41,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                                      JwtAccessTokenConverter acessTokenConverter,
                                      JwtTokenStore tokenStore,
                                      JwtTokenEnhancer tokenEnhancer,
-                                     AuthenticationManager authenticationManager) {
+                                     AuthenticationManager authenticationManager,
+                                     UserService userService) {
         this.passwordEncoder = passwordEncoder;
         this.acessTokenConverter = acessTokenConverter;
         this.tokenStore = tokenStore;
         this.tokenEnhancer = tokenEnhancer;
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @Override
@@ -55,21 +59,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient(this.clientId)
-                .secret(this.passwordEncoder.encode(this.clientSecret))
+                .withClient(clientId)
+                .secret(passwordEncoder.encode(clientSecret))
                 .scopes("read", "write")
-                .authorizedGrantTypes("password")
-                .accessTokenValiditySeconds(this.jwtDuration);
+                .authorizedGrantTypes("password", "refresh_token")
+                .accessTokenValiditySeconds(jwtDuration)
+                .refreshTokenValiditySeconds(jwtDuration);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain chain = new TokenEnhancerChain();
-        chain.setTokenEnhancers(List.of(this.tokenEnhancer, this.acessTokenConverter));
-        endpoints.authenticationManager(this.authenticationManager)
-                .tokenStore(this.tokenStore)
-                .accessTokenConverter(this.acessTokenConverter)
-                .tokenEnhancer(chain);
+        chain.setTokenEnhancers(List.of(tokenEnhancer, acessTokenConverter));
+        endpoints.authenticationManager(authenticationManager)
+                .tokenStore(tokenStore)
+                .accessTokenConverter(acessTokenConverter)
+                .tokenEnhancer(chain)
+                .userDetailsService(userService);
     }
 
 }

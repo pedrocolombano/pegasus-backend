@@ -82,6 +82,15 @@ public class User implements UserDetails, Serializable {
                 .collect(Collectors.toSet());
     }
 
+    public boolean hasRole(String role) {
+        for (Role r : roles) {
+            if (r.getAuthority().equals(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String getUsername() {
         return this.email;
