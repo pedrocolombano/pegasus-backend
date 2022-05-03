@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: pegasus-backend
+
+  profiles:
+    active: test
+
+  sql:
+    init:
+      encoding: UTF-8
+
+  jpa:
+    open-in-view: false
+    defer-datasource-initialization: true
