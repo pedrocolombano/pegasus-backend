@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class AuthService {
 
+    private static final String ADMIN_ROLE = "ROLE_ADMIN";
+
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
@@ -27,7 +29,7 @@ public class AuthService {
 
     public void validateSelfOrAdmin(Long userId) {
         User user = getAuthenticatedUser();
-        if (!user.getId().equals(userId) && !user.hasRole("ROLE_ADMIN")) {
+        if (!user.getId().equals(userId) && !user.hasRole(ADMIN_ROLE)) {
             throw new ForbiddenException("Access denied");
         }
     }
