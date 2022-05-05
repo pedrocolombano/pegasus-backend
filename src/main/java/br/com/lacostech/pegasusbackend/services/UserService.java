@@ -44,6 +44,19 @@ public class UserService implements UserDetailsService {
         return new UserResponse(userRepository.save(user));
     }
 
+    @Transactional
+    public UserResponse update(Long id, UserRequest request) {
+        authService.validateSelfOrAdmin(id);
+        try {
+            User user = userRepository.getById(id);
+            validateUserAccount(request);
+            copyDataFromRequest(user, request);
+            return new UserResponse(userRepository.save(user));
+        } catch (EntityNotFoundException e) {
+            throw new NotFoundException("User id not found");
+        }
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);

@@ -5,6 +5,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -33,6 +34,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
     private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
+    private static final String[] USER_API = { "/users" };
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
@@ -49,6 +51,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(PUBLIC)
                 .permitAll()
+                .antMatchers(HttpMethod.POST, USER_API)
+                .permitAll()
+                .antMatchers(USER_API)
+                .authenticated()
                 .anyRequest()
                 .authenticated();
 
