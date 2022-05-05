@@ -1,6 +1,7 @@
 package br.com.lacostech.pegasusbackend.controllers.exceptions;
 
 import br.com.lacostech.pegasusbackend.services.exceptions.ForbiddenException;
+import br.com.lacostech.pegasusbackend.services.exceptions.InvalidDataException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import br.com.lacostech.pegasusbackend.services.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,13 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public StandardError notFoundError(NotFoundException exception) {
+        return new StandardError(exception.getMessage());
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseBody
+    public StandardError invalidDataError(InvalidDataException exception) {
         return new StandardError(exception.getMessage());
     }
 

@@ -22,9 +22,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,7 +55,7 @@ public class User implements UserDetails, Serializable {
     @Column(nullable = false, length = 40)
     private String lastName;
 
-    @Column(nullable = false, length = 11, unique = true)
+    @Column(nullable = false, length = 11)
     private String document;
 
     @Column(nullable = false, length = 40, unique = true)
@@ -79,6 +82,9 @@ public class User implements UserDetails, Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
@@ -93,6 +99,16 @@ public class User implements UserDetails, Serializable {
             }
         }
         return false;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     @Override
