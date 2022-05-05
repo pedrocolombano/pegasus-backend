@@ -21,3 +21,10 @@ INSERT INTO tb_user_role (user_id, role_id) VALUES (1, 1);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (2, 2);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 3);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (4, 4);
+
+
+INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, city, state, user_id) VALUES (
+'Rua Passo Fundo', 123, null, 'Sudoeste', '85507-410', 'Pato Branco', 'Paraná', 4);
+
+INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, city, state, user_id) VALUES (
+'Rua Alpes', 123, null, 'Jardim Petrópolis', '74460-430', 'Goiânia', 'Goiás', 4);

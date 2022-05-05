@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,9 +29,11 @@ public class UserResponse implements Serializable {
     private String phone;
     private LocalDate birthDate;
     private Gender gender;
+    private Set<AddressResponse> addresses = new HashSet<>();
 
     public UserResponse(User entity) {
         BeanUtils.copyProperties(entity, this);
+        entity.getAddresses().forEach(address -> this.addresses.add(new AddressResponse(address)));
     }
 
 }
