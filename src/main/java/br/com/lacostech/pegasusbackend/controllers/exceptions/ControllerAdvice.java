@@ -1,5 +1,6 @@
 package br.com.lacostech.pegasusbackend.controllers.exceptions;
 
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.ForbiddenException;
 import br.com.lacostech.pegasusbackend.services.exceptions.InvalidDataException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
@@ -24,6 +25,13 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
     public StandardError invalidDataError(InvalidDataException exception) {
+        return new StandardError(exception.getMessage());
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public StandardError databaseError(DatabaseException exception) {
         return new StandardError(exception.getMessage());
     }
 

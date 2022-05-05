@@ -6,10 +6,13 @@ import br.com.lacostech.pegasusbackend.model.requests.UserRequest;
 import br.com.lacostech.pegasusbackend.model.responses.UserResponse;
 import br.com.lacostech.pegasusbackend.repositories.RoleRepository;
 import br.com.lacostech.pegasusbackend.repositories.UserRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.InvalidDataException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,6 +57,17 @@ public class UserService implements UserDetailsService {
             return new UserResponse(userRepository.save(user));
         } catch (EntityNotFoundException e) {
             throw new NotFoundException("User id not found");
+        }
+    }
+
+    public void deleteById(Long id) {
+        authService.validateSelfOrAdmin(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException | IllegalArgumentException e) {
+            throw new NotFoundException("User id not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
         }
     }
 
