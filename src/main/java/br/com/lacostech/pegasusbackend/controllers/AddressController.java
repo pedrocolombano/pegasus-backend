@@ -1,0 +1,34 @@
+package br.com.lacostech.pegasusbackend.controllers;
+
+import br.com.lacostech.pegasusbackend.model.requests.AddressRequest;
+import br.com.lacostech.pegasusbackend.model.responses.AddressResponse;
+import br.com.lacostech.pegasusbackend.services.AddressService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/addresses")
+@AllArgsConstructor
+public class AddressController {
+
+    private final AddressService addressService;
+
+    @PostMapping
+    public ResponseEntity<AddressResponse> insert(@RequestBody AddressRequest request) {
+        AddressResponse response = addressService.insert(request);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(response);
+    }
+
+}
