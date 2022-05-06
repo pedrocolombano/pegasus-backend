@@ -28,6 +28,15 @@ public class AddressService {
         return new AddressResponse(addressRepository.save(address));
     }
 
+    @Transactional
+    public AddressResponse update(Long id, AddressRequest request) {
+        Address address = addressRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Address id not found"));
+        copyDataFromRequest(address, request);
+        return new AddressResponse(addressRepository.save(address));
+    }
+
     private void copyDataFromRequest(Address entity, AddressRequest request) {
         if (Objects.nonNull(request)) {
             try {

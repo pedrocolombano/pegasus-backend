@@ -5,7 +5,9 @@ import br.com.lacostech.pegasusbackend.model.responses.AddressResponse;
 import br.com.lacostech.pegasusbackend.services.AddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,11 @@ public class AddressController {
                 .buildAndExpand(response.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponse> update(@PathVariable Long id, @RequestBody AddressRequest request) {
+        return ResponseEntity.ok(addressService.update(id, request));
     }
 
 }
