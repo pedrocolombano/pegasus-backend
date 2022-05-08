@@ -5,13 +5,15 @@ import br.com.lacostech.pegasusbackend.model.entities.User;
 import br.com.lacostech.pegasusbackend.model.requests.AddressRequest;
 import br.com.lacostech.pegasusbackend.model.responses.AddressResponse;
 import br.com.lacostech.pegasusbackend.repositories.AddressRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 @Service
@@ -25,7 +27,8 @@ public class AddressService {
     public AddressResponse insert(AddressRequest request) {
         Address address = new Address();
         copyDataFromRequest(address, request);
-        return new AddressResponse(addressRepository.save(address));
+        address = addressRepository.save(address);
+        return new AddressResponse(address);
     }
 
     @Transactional
@@ -34,19 +37,26 @@ public class AddressService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Address id not found"));
         copyDataFromRequest(address, request);
-        return new AddressResponse(addressRepository.save(address));
+        address = addressRepository.save(address);
+        return new AddressResponse(address);
+    }
+
+    public void deleteById(Long id) {
+        try {
+            addressRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException | IllegalArgumentException e) {
+            throw new NotFoundException("Address id not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(Address entity, AddressRequest request) {
         if (Objects.nonNull(request)) {
-            try {
-                BeanUtils.copyProperties(request, entity);
+            BeanUtils.copyProperties(request, entity);
 
-                User user = authService.getAuthenticatedUser();
-                entity.setUser(user);
-            } catch (EntityNotFoundException e) {
-                throw new NotFoundException("User id not found");
-            }
+            User user = authService.getAuthenticatedUser();
+            entity.setUser(user);
         }
     }
 

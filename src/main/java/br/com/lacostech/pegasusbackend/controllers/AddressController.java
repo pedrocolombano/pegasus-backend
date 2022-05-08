@@ -5,6 +5,7 @@ import br.com.lacostech.pegasusbackend.model.responses.AddressResponse;
 import br.com.lacostech.pegasusbackend.services.AddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +37,12 @@ public class AddressController {
     @PutMapping("/{id}")
     public ResponseEntity<AddressResponse> update(@PathVariable Long id, @RequestBody AddressRequest request) {
         return ResponseEntity.ok(addressService.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        addressService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
