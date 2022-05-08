@@ -1,5 +1,6 @@
 package br.com.lacostech.pegasusbackend.controllers;
 
+import br.com.lacostech.pegasusbackend.model.responses.ProductDetailedResponse;
 import br.com.lacostech.pegasusbackend.model.responses.ProductMinResponse;
 import br.com.lacostech.pegasusbackend.services.ProductService;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,12 @@ public class ProductController {
     public ResponseEntity<Page<ProductMinResponse>> findAllPaged(@PageableDefault(size = 20) final Pageable pageable) {
         Page<ProductMinResponse> products = productService.findAllPaged(pageable);
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDetailedResponse> findById(@PathVariable Long id) {
+        ProductDetailedResponse product = productService.findById(id);
+        return ResponseEntity.ok(product);
     }
 
 }

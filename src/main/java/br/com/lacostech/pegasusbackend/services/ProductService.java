@@ -1,7 +1,10 @@
 package br.com.lacostech.pegasusbackend.services;
 
+import br.com.lacostech.pegasusbackend.model.entities.Product;
+import br.com.lacostech.pegasusbackend.model.responses.ProductDetailedResponse;
 import br.com.lacostech.pegasusbackend.model.responses.ProductMinResponse;
 import br.com.lacostech.pegasusbackend.repositories.ProductRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +21,13 @@ public class ProductService {
     public Page<ProductMinResponse> findAllPaged(final Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(ProductMinResponse::new);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDetailedResponse findById(final Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product id " + id + " not found"));
+        return new ProductDetailedResponse(product);
     }
 
 }
