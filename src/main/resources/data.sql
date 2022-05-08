@@ -28,3 +28,62 @@ INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, c
 
 INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, city, state, user_id) VALUES (
 'Rua Alpes', 123, null, 'Jardim Petrópolis', '74460-430', 'Goiânia', 'Goiás', 4);
+
+
+INSERT INTO tb_category (name) VALUES ('Brinquedos');
+INSERT INTO tb_category (name) VALUES ('Roupas');
+INSERT INTO tb_category (name) VALUES ('Ração');
+INSERT INTO tb_category (name) VALUES ('Cachorros');
+INSERT INTO tb_category (name) VALUES ('Gatos');
+
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Macaco Chalesco Brinquedo Para Cães Pelúcia Marrom', 40, 'Ideal para os pets de todos os portes e idades',
+'https://static.petz.com.br/fotos/1531491431642.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Brinquedo de Pelúcia Chalesco Crocodilo', 25, 'Divertido e criativo',
+'https://static.petz.com.br/fotos/1457992186939.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Meia American Pets para Cães e Gatos Tamanho M', 32.99, 'Ótimo para manter as patas quentinhas',
+'https://static.petz.com.br/fotos/1623255561001.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Casaco Bonito pra Cachorro Maxi Marinho para Cães', 99.99, 'Toda em soft antialérgico',
+'https://static.petz.com.br/fotos/1646770429643.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Camiseta Piticas Homem Aranha', 49.99, 'Produto original, licenciado e exclusivo Piticas',
+'https://static.petz.com.br/fotos/1600801574668.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Ração GranPlus Choice para Gatos Adultos Sabor Frango e Carne 10,1kg', 132.50, 'Feita para os paladares mais exigentes',
+'https://static.petz.com.br/fotos/1603901892437.jpg', NOW());
+
+INSERT INTO tb_product (name, price, description, image_url, created_at) VALUES (
+'Ração Golden Special Sabor Frango e Carne para Cães Adultos', 181.99, 'Fórmula rica em nutrientes e minerais',
+'https://static.petz.com.br/fotos/1615377293554.jpg', NOW());
+
+
+INSERT INTO tb_product_category (product_id, category_id) VALUES (1, 1);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (2, 1);
+
+INSERT INTO tb_product_category (product_id, category_id) VALUES (3, 2);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (4, 2);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (5, 2);
+
+INSERT INTO tb_product_category (product_id, category_id) VALUES (6, 3);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (7, 3);
+
+INSERT INTO tb_product_category (product_id, category_id) VALUES (1, 4);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (2, 4);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (3, 4);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (4, 4);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (5, 4);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (7, 4);
+
+INSERT INTO tb_product_category (product_id, category_id) VALUES (3, 5);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (5, 5);
+INSERT INTO tb_product_category (product_id, category_id) VALUES (6, 5);
+
