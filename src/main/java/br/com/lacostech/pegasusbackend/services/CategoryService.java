@@ -15,7 +15,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CategoryResponse> findAll() {
         return categoryRepository.findAll()
                 .stream()

@@ -35,7 +35,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
     private static final String[] USER_API = { "/users/**" };
-    private static final String[] CATALOG = { "/categories/**" };
+    private static final String[] CATALOG = { "/categories/**", "/products/**" };
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
