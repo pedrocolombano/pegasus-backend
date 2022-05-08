@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,13 @@ public class ProductController {
     public ResponseEntity<ProductDetailedResponse> findById(@PathVariable Long id) {
         ProductDetailedResponse product = productService.findById(id);
         return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductMinResponse>> findAllByName(@RequestParam String query,
+                                                                  @PageableDefault(size = 20) final Pageable pageable) {
+        Page<ProductMinResponse> products = productService.findAllByName(query, pageable);
+        return ResponseEntity.ok(products);
     }
 
 }

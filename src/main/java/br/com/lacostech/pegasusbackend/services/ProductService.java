@@ -30,4 +30,10 @@ public class ProductService {
         return new ProductDetailedResponse(product);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductMinResponse> findAllByName(final String search, final Pageable pageable) {
+        return productRepository.findAllByNameContainingIgnoreCase(search, pageable)
+                .map(ProductMinResponse::new);
+    }
+
 }
