@@ -31,7 +31,7 @@ public class UserResponse implements Serializable {
     private Gender gender;
     private Set<AddressResponse> addresses = new HashSet<>();
 
-    public UserResponse(User entity) {
+    public UserResponse(final User entity) {
         BeanUtils.copyProperties(entity, this);
         entity.getAddresses().forEach(address -> this.addresses.add(new AddressResponse(address)));
     }

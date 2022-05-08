@@ -27,7 +27,7 @@ public class AddressResponse implements Serializable {
     private String city;
     private String state;
 
-    public AddressResponse(Address entity) {
+    public AddressResponse(final Address entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
         }

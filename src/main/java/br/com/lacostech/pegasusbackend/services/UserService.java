@@ -20,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 @Service
@@ -33,34 +32,35 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
 
     @Transactional(readOnly = true)
-    public UserResponse findById(Long id) {
+    public UserResponse findById(final Long id) {
         authService.validateSelfOrAdmin(id);
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User id not found"));
+        User user = getUserById(id);
         return new UserResponse(user);
     }
 
     @Transactional
-    public UserResponse insert(UserRequest request) {
+    public UserResponse insert(final UserRequest request) {
         User user = new User();
         validateUserAccount(request);
         copyDataFromRequest(user, request);
-        return new UserResponse(userRepository.save(user));
+
+        user = userRepository.save(user);
+        return new UserResponse(user);
     }
 
     @Transactional
-    public UserResponse update(Long id, UserRequest request) {
+    public UserResponse update(final Long id, final UserRequest request) {
         authService.validateSelfOrAdmin(id);
-        try {
-            User user = userRepository.getById(id);
-            validateUserAccount(request);
-            copyDataFromRequest(user, request);
-            return new UserResponse(userRepository.save(user));
-        } catch (EntityNotFoundException e) {
-            throw new NotFoundException("User id not found");
-        }
+
+        User user = getUserById(id);
+        validateUserAccount(request);
+        copyDataFromRequest(user, request);
+
+        user = userRepository.save(user);
+        return new UserResponse(user);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         authService.validateSelfOrAdmin(id);
         try {
             userRepository.deleteById(id);
@@ -72,7 +72,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
         if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("Email not found");
@@ -81,32 +81,35 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    private void validateUserAccount(UserRequest request) {
+    private User getUserById(final Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User id not found"));
+    }
+
+    @Transactional(readOnly = true)
+    private void validateUserAccount(final UserRequest request) {
         User user = userRepository.findByEmail(request.getEmail());
         if (Objects.nonNull(user) && !isSameUser(request, user)) {
             throw new InvalidDataException("Email already being used");
         }
     }
 
-    private boolean isSameUser(UserRequest request, User user) {
+    private boolean isSameUser(final UserRequest request, final User user) {
         return user.getId().equals(request.getId());
     }
 
-    private void copyDataFromRequest(User entity, UserRequest request) {
+    private void copyDataFromRequest(final User entity, final UserRequest request) {
         if (Objects.nonNull(request)) {
-            try {
-                BeanUtils.copyProperties(request, entity);
+            BeanUtils.copyProperties(request, entity);
 
-                entity.setPassword(passwordEncoder.encode(request.getPassword()));
+            entity.setPassword(passwordEncoder.encode(request.getPassword()));
 
-                entity.getRoles().clear();
-                request.getRoles().forEach(r -> {
-                    Role role = roleRepository.getById(r.getId());
-                    entity.getRoles().add(role);
-                });
-            } catch (EntityNotFoundException e) {
-                throw new NotFoundException("Role id not found");
-            }
+            entity.getRoles().clear();
+            request.getRoles().forEach(r -> {
+                Role role = roleRepository.findById(r.getId())
+                        .orElseThrow(() -> new NotFoundException("Role id " + r.getId() + " not found"));
+                entity.getRoles().add(role);
+            });
         }
     }
 

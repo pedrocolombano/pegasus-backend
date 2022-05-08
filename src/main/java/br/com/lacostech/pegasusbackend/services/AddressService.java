@@ -24,24 +24,26 @@ public class AddressService {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public AddressResponse insert(AddressRequest request) {
+    public AddressResponse insert(final AddressRequest request) {
         Address address = new Address();
         copyDataFromRequest(address, request);
+
         address = addressRepository.save(address);
         return new AddressResponse(address);
     }
 
     @Transactional
-    public AddressResponse update(Long id, AddressRequest request) {
+    public AddressResponse update(final Long id, final AddressRequest request) {
         Address address = addressRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Address id not found"));
         copyDataFromRequest(address, request);
+
         address = addressRepository.save(address);
         return new AddressResponse(address);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         try {
             addressRepository.deleteById(id);
         } catch (EmptyResultDataAccessException | IllegalArgumentException e) {
@@ -51,7 +53,7 @@ public class AddressService {
         }
     }
 
-    private void copyDataFromRequest(Address entity, AddressRequest request) {
+    private void copyDataFromRequest(final Address entity, final AddressRequest request) {
         if (Objects.nonNull(request)) {
             BeanUtils.copyProperties(request, entity);
 
