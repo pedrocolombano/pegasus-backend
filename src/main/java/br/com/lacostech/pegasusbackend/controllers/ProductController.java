@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,13 +36,13 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailedResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<ProductDetailedResponse> findById(@PathVariable final Long id) {
         ProductDetailedResponse product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ProductMinResponse>> findAllByName(@RequestParam String query,
+    public ResponseEntity<Page<ProductMinResponse>> findAllByName(@RequestParam final String query,
                                                                   @PageableDefault(size = 20) final Pageable pageable) {
         Page<ProductMinResponse> products = productService.findAllByName(query, pageable);
         return ResponseEntity.ok(products);
@@ -58,9 +59,15 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDetailedResponse> update(@PathVariable Long id, @RequestBody ProductRequest request) {
+    public ResponseEntity<ProductDetailedResponse> update(@PathVariable final Long id, @RequestBody final ProductRequest request) {
         ProductDetailedResponse response = productService.update(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable final Long id) {
+        productService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -7,9 +7,12 @@ import br.com.lacostech.pegasusbackend.model.responses.ProductDetailedResponse;
 import br.com.lacostech.pegasusbackend.model.responses.ProductMinResponse;
 import br.com.lacostech.pegasusbackend.repositories.CategoryRepository;
 import br.com.lacostech.pegasusbackend.repositories.ProductRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,16 @@ public class ProductService {
         copyDataFromRequest(request, product);
         product = productRepository.save(product);
         return new ProductDetailedResponse(product);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+           productRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Product id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private Product getProductById(Long id) {
