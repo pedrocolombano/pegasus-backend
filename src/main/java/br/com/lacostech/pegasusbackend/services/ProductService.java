@@ -32,8 +32,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDetailedResponse findById(final Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Product id " + id + " not found"));
+        Product product = getProductById(id);
         return new ProductDetailedResponse(product);
     }
 
@@ -49,6 +48,19 @@ public class ProductService {
         copyDataFromRequest(request, product);
         product = productRepository.save(product);
         return new ProductDetailedResponse(product);
+    }
+
+    @Transactional
+    public ProductDetailedResponse update(final Long id, final ProductRequest request) {
+        Product product = getProductById(id);
+        copyDataFromRequest(request, product);
+        product = productRepository.save(product);
+        return new ProductDetailedResponse(product);
+    }
+
+    private Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product id " + id + " not found"));
     }
 
     private void copyDataFromRequest(final ProductRequest request, Product entity) {

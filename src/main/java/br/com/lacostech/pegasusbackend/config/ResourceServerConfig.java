@@ -61,7 +61,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authenticated()
                 .antMatchers(HttpMethod.GET, CATALOG)
                 .permitAll()
-                .antMatchers(HttpMethod.POST, CATALOG)
+                .antMatchers(CATALOG)
                 .hasAnyRole(ADMIN, MANAGER)
                 .anyRequest()
                 .authenticated();
