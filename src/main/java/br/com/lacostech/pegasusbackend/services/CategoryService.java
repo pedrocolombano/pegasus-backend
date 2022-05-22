@@ -3,8 +3,11 @@ package br.com.lacostech.pegasusbackend.services;
 import br.com.lacostech.pegasusbackend.model.CategoryModel;
 import br.com.lacostech.pegasusbackend.model.entities.Category;
 import br.com.lacostech.pegasusbackend.repositories.CategoryRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,16 @@ public class CategoryService {
         copyDataFromRequest(request, category);
         category = categoryRepository.save(category);
         return new CategoryModel(category);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Category id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(final CategoryModel request, Category entity) {

@@ -4,6 +4,7 @@ import br.com.lacostech.pegasusbackend.model.CategoryModel;
 import br.com.lacostech.pegasusbackend.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,12 @@ public class CategoryController {
     public ResponseEntity<CategoryModel> update(@PathVariable final Long id, @RequestBody final CategoryModel request) {
         CategoryModel response = categoryService.update(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable final Long id) {
+        categoryService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
