@@ -1,6 +1,6 @@
 package br.com.lacostech.pegasusbackend.services;
 
-import br.com.lacostech.pegasusbackend.model.responses.CategoryResponse;
+import br.com.lacostech.pegasusbackend.model.CategoryModel;
 import br.com.lacostech.pegasusbackend.repositories.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,10 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoryResponse> findAll() {
+    public List<CategoryModel> findAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(CategoryResponse::new)
+                .map(CategoryModel::new)
                 .collect(Collectors.toList());
     }
 

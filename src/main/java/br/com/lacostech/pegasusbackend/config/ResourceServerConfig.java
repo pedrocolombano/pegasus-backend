@@ -24,6 +24,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final String TEST_PROFILE = "test";
 
+    private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
+    private static final String[] USER_API = { "/users/**" };
+    private static final String[] CATALOG = { "/categories/**", "/products/**" };
+
+    private static final String ADMIN = "ADMIN";
+    private static final String MANAGER = "MANAGER";
+
     @Value("${spring.profiles.active}")
     private String profile;
 
@@ -32,10 +39,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public ResourceServerConfig(TokenStore tokenStore) {
         this.tokenStore = tokenStore;
     }
-
-    private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
-    private static final String[] USER_API = { "/users/**" };
-    private static final String[] CATALOG = { "/categories/**", "/products/**" };
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
@@ -58,11 +61,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authenticated()
                 .antMatchers(HttpMethod.GET, CATALOG)
                 .permitAll()
-                .antMatchers(CATALOG)
-                .authenticated()
+                .antMatchers(HttpMethod.POST, CATALOG)
+                .hasAnyRole(ADMIN, MANAGER)
                 .anyRequest()
                 .authenticated();
-
         http.cors()
                 .configurationSource(getCorsConfigurationSource());
     }

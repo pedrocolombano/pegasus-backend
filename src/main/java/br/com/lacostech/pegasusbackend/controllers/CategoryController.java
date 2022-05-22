@@ -1,6 +1,6 @@
 package br.com.lacostech.pegasusbackend.controllers;
 
-import br.com.lacostech.pegasusbackend.model.responses.CategoryResponse;
+import br.com.lacostech.pegasusbackend.model.CategoryModel;
 import br.com.lacostech.pegasusbackend.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> findAll() {
-        List<CategoryResponse> categories = categoryService.findAll();
+    public ResponseEntity<List<CategoryModel>> findAll() {
+        List<CategoryModel> categories = categoryService.findAll();
         return ResponseEntity.ok(categories);
     }
 

@@ -1,4 +1,4 @@
-package br.com.lacostech.pegasusbackend.model.responses;
+package br.com.lacostech.pegasusbackend.model;
 
 import br.com.lacostech.pegasusbackend.model.entities.Category;
 import lombok.AllArgsConstructor;
@@ -14,14 +14,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CategoryResponse implements Serializable {
+public class CategoryModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;
 
-    public CategoryResponse(Category entity) {
+    public CategoryModel(Category entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
         }
