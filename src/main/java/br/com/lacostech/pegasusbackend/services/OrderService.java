@@ -10,6 +10,7 @@ import br.com.lacostech.pegasusbackend.model.responses.OrderResponse;
 import br.com.lacostech.pegasusbackend.repositories.OrderItemRepository;
 import br.com.lacostech.pegasusbackend.repositories.OrderRepository;
 import br.com.lacostech.pegasusbackend.repositories.ProductRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.InvalidDataException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -50,6 +51,37 @@ public class OrderService {
         return new OrderResponse(order);
     }
 
+    @Transactional
+    public OrderResponse update(final Long id, final OrderRequest request) {
+        Order order = getOrderById(id);
+        copyDataFromRequest(request, order);
+
+        order = orderRepository.save(order);
+        setOrderItemDataFromRequest(request, order);
+
+        return new OrderResponse(order);
+    }
+
+    @Transactional
+    public OrderResponse updateOrderStatus(final Long id, final String status) {
+        try {
+            OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
+
+            Order order = getOrderById(id);
+            order.setStatus(orderStatus);
+
+            order = orderRepository.save(order);
+            return new OrderResponse(order);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidDataException("Status " + status + " does not exists");
+        }
+    }
+
+    private Order getOrderById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order id " + id + " not found"));
+    }
+
     private void copyDataFromRequest(final OrderRequest request, final Order order) {
         if (Objects.nonNull(request)) {
             BeanUtils.copyProperties(request, order);
@@ -60,6 +92,7 @@ public class OrderService {
     }
 
     private void setOrderItemDataFromRequest(final OrderRequest request, final Order order) {
+        order.getItems().clear();
         request.getItems().forEach(i -> {
             OrderItem item = new OrderItem();
             BeanUtils.copyProperties(i, item);
@@ -67,7 +100,7 @@ public class OrderService {
             item.setOrder(order);
 
             Product product = productRepository.findById(i.getProductId())
-                            .orElseThrow(() -> new NotFoundException("Product id " + i.getProductId() + " not found"));
+                    .orElseThrow(() -> new NotFoundException("Product id " + i.getProductId() + " not found"));
             item.setProduct(product);
             item.setPrice(product.getPrice());
 

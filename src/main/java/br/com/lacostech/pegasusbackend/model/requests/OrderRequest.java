@@ -1,6 +1,5 @@
 package br.com.lacostech.pegasusbackend.model.requests;
 
-import br.com.lacostech.pegasusbackend.model.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,6 @@ public class OrderRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private OrderStatus status;
     private Set<OrderItemRequest> items = new HashSet<>();
 
 }

@@ -37,6 +37,10 @@ public class OrderResponse implements Serializable {
         }
     }
 
+    public String getStatus() {
+        return this.status.getName();
+    }
+
     public BigDecimal getTotal() {
         return items.stream()
                 .map(OrderItemResponse::getSubtotal)
