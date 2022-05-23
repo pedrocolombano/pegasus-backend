@@ -40,10 +40,6 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
-    public BigDecimal getSubtotal() {
-        return this.price.multiply(new BigDecimal(quantity));
-    }
-
     public Order getOrder() {
         return this.id.getOrder();
     }

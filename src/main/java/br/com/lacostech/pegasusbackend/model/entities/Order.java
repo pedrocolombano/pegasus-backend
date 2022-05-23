@@ -20,7 +20,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -53,12 +52,6 @@ public class Order implements Serializable {
 
     private LocalDateTime moment;
     private LocalDateTime updatedAt;
-
-    public BigDecimal getTotal() {
-        return items.stream()
-                .map(OrderItem::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
 
     @PrePersist
     public void prePersist() {
