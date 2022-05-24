@@ -28,10 +28,13 @@ public class OrderResponse implements Serializable {
     private LocalDateTime moment;
     private LocalDateTime updatedAt;
     private Set<OrderItemResponse> items = new HashSet<>();
+    private AddressResponse address;
 
     public OrderResponse(Order entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
+
+            this.address = new AddressResponse(entity.getAddress());
 
             entity.getItems().forEach(i -> this.items.add(new OrderItemResponse(i)));
         }

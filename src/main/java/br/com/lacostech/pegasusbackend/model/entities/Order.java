@@ -43,6 +43,10 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

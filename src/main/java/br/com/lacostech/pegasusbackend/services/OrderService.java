@@ -1,5 +1,6 @@
 package br.com.lacostech.pegasusbackend.services;
 
+import br.com.lacostech.pegasusbackend.model.entities.Address;
 import br.com.lacostech.pegasusbackend.model.entities.Order;
 import br.com.lacostech.pegasusbackend.model.entities.OrderItem;
 import br.com.lacostech.pegasusbackend.model.entities.Product;
@@ -7,6 +8,7 @@ import br.com.lacostech.pegasusbackend.model.entities.User;
 import br.com.lacostech.pegasusbackend.model.enums.OrderStatus;
 import br.com.lacostech.pegasusbackend.model.requests.OrderRequest;
 import br.com.lacostech.pegasusbackend.model.responses.OrderResponse;
+import br.com.lacostech.pegasusbackend.repositories.AddressRepository;
 import br.com.lacostech.pegasusbackend.repositories.OrderItemRepository;
 import br.com.lacostech.pegasusbackend.repositories.OrderRepository;
 import br.com.lacostech.pegasusbackend.repositories.ProductRepository;
@@ -28,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
+    private final AddressRepository addressRepository;
     private final AuthService authService;
 
     @Transactional(readOnly = true)
@@ -87,7 +90,11 @@ public class OrderService {
             BeanUtils.copyProperties(request, order);
 
             User client = authService.getAuthenticatedUser();
+            Address address = addressRepository.findByIdAndUser(request.getAddressId(), client)
+                    .orElseThrow(() -> new NotFoundException("User " + client.getFirstName() + " has no address with id " + request.getAddressId()));
+
             order.setClient(client);
+            order.setAddress(address);
         }
     }
 

@@ -14,7 +14,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +24,16 @@ public class AddressService {
 
     private final AuthService authService;
     private final AddressRepository addressRepository;
+
+    @Transactional(readOnly = true)
+    public List<AddressResponse> findAll() {
+        User user = authService.getAuthenticatedUser();
+        return addressRepository
+                .findAllByUser(user)
+                .stream()
+                .map(AddressResponse::new)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public AddressResponse insert(final AddressRequest request) {

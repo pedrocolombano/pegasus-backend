@@ -6,6 +6,7 @@ import br.com.lacostech.pegasusbackend.services.AddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/addresses")
@@ -22,6 +24,12 @@ import java.net.URI;
 public class AddressController {
 
     private final AddressService addressService;
+
+    @GetMapping
+    public ResponseEntity<List<AddressResponse>> findAll() {
+        List<AddressResponse> addresses = addressService.findAll();
+        return ResponseEntity.ok(addresses);
+    }
 
     @PostMapping
     public ResponseEntity<AddressResponse> insert(@RequestBody AddressRequest request) {

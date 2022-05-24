@@ -24,7 +24,7 @@ INSERT INTO tb_user_role (user_id, role_id) VALUES (4, 4);
 
 
 INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, city, state, user_id) VALUES (
-'Rua Passo Fundo', 123, null, 'Sudoeste', '85507-410', 'Pato Branco', 'Paraná', 4);
+'Rua Passo Fundo', 123, null, 'Sudoeste', '85507-410', 'Pato Branco', 'Paraná', 3);
 
 INSERT INTO tb_address (street, number, complement, neighborhood, postal_code, city, state, user_id) VALUES (
 'Rua Alpes', 123, null, 'Jardim Petrópolis', '74460-430', 'Goiânia', 'Goiás', 4);
@@ -88,11 +88,11 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES (5, 5);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (6, 5);
 
 
-INSERT INTO tb_order (client_id, status, moment) VALUES (3, 'SHIPPED', NOW());
-INSERT INTO tb_order (client_id, status, moment) VALUES (3, 'DELIVERED', NOW());
-INSERT INTO tb_order (client_id, status, moment) VALUES (3, 'CANCELED', NOW());
+INSERT INTO tb_order (client_id, address_id, status, moment) VALUES (3, 1, 'SHIPPED', NOW());
+INSERT INTO tb_order (client_id, address_id, status, moment) VALUES (3, 1, 'DELIVERED', NOW());
+INSERT INTO tb_order (client_id, address_id, status, moment) VALUES (3, 1, 'CANCELED', NOW());
 
-INSERT INTO tb_order (client_id, status, moment) VALUES (4, 'PAID', NOW());
+INSERT INTO tb_order (client_id, address_id, status, moment) VALUES (4, 2, 'PAID', NOW());
 
 
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (1, 1, 5, 40);
@@ -103,4 +103,3 @@ INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (3, 5, 
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (4, 5, 2, 49.99);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (4, 6, 1, 132.50);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (4, 7, 3, 181.99);
-
