@@ -69,14 +69,23 @@ public class OrderService {
     public OrderResponse updateOrderStatus(final Long id, final String status) {
         try {
             OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
-
             Order order = getOrderById(id);
+
+            if (OrderStatus.CANCELED.equals(orderStatus)) {
+                validateCanceledOrderStatus(order);
+            }
             order.setStatus(orderStatus);
 
             order = orderRepository.save(order);
             return new OrderResponse(order);
         } catch (IllegalArgumentException e) {
             throw new InvalidDataException("Status " + status + " does not exists");
+        }
+    }
+
+    private void validateCanceledOrderStatus(final Order entity) {
+        if (!OrderStatus.PAID.equals(entity.getStatus())) {
+            throw new InvalidDataException("Order cannot be canceled because is already " + entity.getStatus().getName());
         }
     }
 
