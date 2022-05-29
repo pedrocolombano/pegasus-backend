@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -28,21 +29,23 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public Page<ProductMinResponse> findAllPaged(final Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(ProductMinResponse::new);
+    public Page<ProductMinResponse> findAll(
+            final Long categoryId,
+            final String productName,
+            final Pageable pageable) {
+        Category category = categoryId == 0 ? null : categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Category id " + categoryId + " does not exists"));
+        List<Category> categories = Objects.isNull(category) ? null : List.of(category);
+
+        Page<Product> products = productRepository.find(categories, productName, pageable);
+        productRepository.findProductsWithCategories(products.getContent());
+        return products.map(ProductMinResponse::new);
     }
 
     @Transactional(readOnly = true)
     public ProductDetailedResponse findById(final Long id) {
         Product product = getProductById(id);
         return new ProductDetailedResponse(product);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ProductMinResponse> findAllByName(final String search, final Pageable pageable) {
-        return productRepository.findAllByNameContainingIgnoreCase(search, pageable)
-                .map(ProductMinResponse::new);
     }
 
     @Transactional

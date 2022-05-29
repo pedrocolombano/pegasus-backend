@@ -30,8 +30,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Page<ProductMinResponse>> findAllPaged(@PageableDefault(size = 20) final Pageable pageable) {
-        Page<ProductMinResponse> products = productService.findAllPaged(pageable);
+    public ResponseEntity<Page<ProductMinResponse>> findAllPaged(
+            @RequestParam(name = "categoryId", defaultValue = "0") final Long categoryId,
+            @RequestParam(name = "productName", defaultValue = "") final String productName,
+            @PageableDefault(size = 20) final Pageable pageable) {
+        Page<ProductMinResponse> products = productService.findAll(categoryId, productName, pageable);
         return ResponseEntity.ok(products);
     }
 
@@ -39,13 +42,6 @@ public class ProductController {
     public ResponseEntity<ProductDetailedResponse> findById(@PathVariable final Long id) {
         ProductDetailedResponse product = productService.findById(id);
         return ResponseEntity.ok(product);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<Page<ProductMinResponse>> findAllByName(@RequestParam final String query,
-                                                                  @PageableDefault(size = 20) final Pageable pageable) {
-        Page<ProductMinResponse> products = productService.findAllByName(query, pageable);
-        return ResponseEntity.ok(products);
     }
 
     @PostMapping
