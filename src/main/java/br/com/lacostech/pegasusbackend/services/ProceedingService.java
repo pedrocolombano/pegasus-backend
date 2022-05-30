@@ -3,8 +3,11 @@ package br.com.lacostech.pegasusbackend.services;
 import br.com.lacostech.pegasusbackend.model.ProceedingModel;
 import br.com.lacostech.pegasusbackend.model.entities.Proceeding;
 import br.com.lacostech.pegasusbackend.repositories.ProceedingRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,16 @@ public class ProceedingService {
 
         proceeding = proceedingRepository.save(proceeding);
         return new ProceedingModel(proceeding);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+            proceedingRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Proceed id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(final ProceedingModel request, final Proceeding entity) {
