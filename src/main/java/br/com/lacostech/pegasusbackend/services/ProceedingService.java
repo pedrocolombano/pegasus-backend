@@ -3,6 +3,7 @@ package br.com.lacostech.pegasusbackend.services;
 import br.com.lacostech.pegasusbackend.model.ProceedingModel;
 import br.com.lacostech.pegasusbackend.model.entities.Proceeding;
 import br.com.lacostech.pegasusbackend.repositories.ProceedingRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,16 @@ public class ProceedingService {
     @Transactional
     public ProceedingModel insert(final ProceedingModel request) {
         Proceeding proceeding = new Proceeding();
+        copyDataFromRequest(request, proceeding);
+
+        proceeding = proceedingRepository.save(proceeding);
+        return new ProceedingModel(proceeding);
+    }
+
+    @Transactional
+    public ProceedingModel update(final Long id, final ProceedingModel request) {
+        Proceeding proceeding = proceedingRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Proceed id " + id + " not found"));
         copyDataFromRequest(request, proceeding);
 
         proceeding = proceedingRepository.save(proceeding);
