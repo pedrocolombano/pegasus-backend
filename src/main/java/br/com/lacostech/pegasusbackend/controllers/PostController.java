@@ -22,9 +22,17 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<Page<PostResponse>> findAllPaginated(@PageableDefault(size = 20) final Pageable pageable) {
-        Page<PostResponse> posts = postService.findAllPostsPaginated(pageable);
+        Page<PostResponse> posts = postService.findAllPosts(pageable);        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/themes/{themeId}")
+    public ResponseEntity<Page<PostResponse>> findAllPaginated(
+            @PathVariable final Long themeId,
+            @PageableDefault(size = 20) final Pageable pageable) {
+        Page<PostResponse> posts = postService.findAllPostsByTheme(themeId, pageable);
         return ResponseEntity.ok(posts);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<PostDetailedResponse> findDetailedPost(@PathVariable final Long id) {
