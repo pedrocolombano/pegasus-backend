@@ -5,14 +5,13 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum OrderStatus {
+public enum PetSize {
 
-    PAID(1, "Paid"),
-    SHIPPED(2, "Shipped"),
-    DELIVERED(3, "Delivered"),
-    CANCELED(4, "Canceled");
+    SMALL(1, "Small"),
+    MEDIUM(2, "Medium"),
+    BIG(3, "Big");
 
     private final Integer code;
-    private final String name;
+    private final String description;
 
 }
