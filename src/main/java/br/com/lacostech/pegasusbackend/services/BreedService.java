@@ -4,8 +4,11 @@ import br.com.lacostech.pegasusbackend.model.BreedModel;
 import br.com.lacostech.pegasusbackend.model.entities.Breed;
 import br.com.lacostech.pegasusbackend.model.enums.PetType;
 import br.com.lacostech.pegasusbackend.repositories.BreedRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,16 @@ public class BreedService {
 
         breed = breedRepository.save(breed);
         return new BreedModel(breed);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+            breedRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Breed id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(final BreedModel request, final Breed entity) {
