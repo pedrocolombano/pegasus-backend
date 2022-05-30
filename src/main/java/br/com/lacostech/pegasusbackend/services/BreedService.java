@@ -2,6 +2,7 @@ package br.com.lacostech.pegasusbackend.services;
 
 import br.com.lacostech.pegasusbackend.model.BreedModel;
 import br.com.lacostech.pegasusbackend.model.entities.Breed;
+import br.com.lacostech.pegasusbackend.model.enums.PetType;
 import br.com.lacostech.pegasusbackend.repositories.BreedRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class BreedService {
     private void copyDataFromRequest(final BreedModel request, final Breed entity) {
         if (Objects.nonNull(request)) {
             entity.setName(request.getName());
+
+            PetType petType = PetType.fromDescription(request.getPetType());
+            entity.setPetType(petType);
         }
     }
 

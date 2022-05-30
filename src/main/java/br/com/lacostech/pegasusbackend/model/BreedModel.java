@@ -20,10 +20,13 @@ public class BreedModel implements Serializable {
 
     private Long id;
     private String name;
+    private String petType;
 
     public BreedModel(final Breed entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
+
+            this.petType = entity.getPetType().getDescription();
         }
     }
 
