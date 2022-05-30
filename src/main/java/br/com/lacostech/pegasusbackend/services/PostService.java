@@ -62,6 +62,18 @@ public class PostService {
         return new PostDetailedResponse(post);
     }
 
+    @Transactional
+    public PostDetailedResponse update(final Long id, final PostRequest request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Post id " + id + " not found"));
+        copyDataFromRequest(request, post);
+
+        post = postRepository.save(post);
+        insertPostArticlesFromRequest(post, request.getArticles());
+
+        return new PostDetailedResponse(post);
+    }
+
     private void copyDataFromRequest(final PostRequest request, final Post entity) {
         if (Objects.nonNull(request)) {
             BeanUtils.copyProperties(request, entity);
