@@ -4,6 +4,7 @@ import br.com.lacostech.pegasusbackend.model.BreedModel;
 import br.com.lacostech.pegasusbackend.model.entities.Breed;
 import br.com.lacostech.pegasusbackend.model.enums.PetType;
 import br.com.lacostech.pegasusbackend.repositories.BreedRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,16 @@ public class BreedService {
     @Transactional
     public BreedModel insert(final BreedModel request) {
         Breed breed = new Breed();
+        copyDataFromRequest(request, breed);
+
+        breed = breedRepository.save(breed);
+        return new BreedModel(breed);
+    }
+
+    @Transactional
+    public BreedModel update(final Long id, final BreedModel request) {
+        Breed breed = breedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Breed id " + id + " not found"));
         copyDataFromRequest(request, breed);
 
         breed = breedRepository.save(breed);

@@ -5,7 +5,9 @@ import br.com.lacostech.pegasusbackend.services.BreedService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +38,14 @@ public class BreedController {
                 .buildAndExpand(response.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BreedModel> update(
+            @PathVariable final Long id,
+            @RequestBody final BreedModel breedModel) {
+        BreedModel response = breedService.update(id, breedModel);
+        return ResponseEntity.ok(response);
     }
 
 }
