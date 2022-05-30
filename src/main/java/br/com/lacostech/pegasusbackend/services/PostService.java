@@ -11,9 +11,12 @@ import br.com.lacostech.pegasusbackend.model.responses.PostResponse;
 import br.com.lacostech.pegasusbackend.repositories.ArticleRepository;
 import br.com.lacostech.pegasusbackend.repositories.PostRepository;
 import br.com.lacostech.pegasusbackend.repositories.ThemeRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,6 +75,16 @@ public class PostService {
         insertPostArticlesFromRequest(post, request.getArticles());
 
         return new PostDetailedResponse(post);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+            postRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Post id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(final PostRequest request, final Post entity) {
