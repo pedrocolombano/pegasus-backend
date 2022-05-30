@@ -28,6 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private static final String[] USER_API = { "/users/**" };
     private static final String[] CATALOG = { "/categories/**", "/products/**" };
     private static final String[] BLOG = { "/posts/**", "/themes/**" };
+    private static final String[] SCHEDULE = { "/breeds/**" };
 
     private static final String ADMIN = "ADMIN";
     private static final String MANAGER = "MANAGER";
@@ -69,6 +70,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .permitAll()
                 .antMatchers(BLOG)
                 .hasAnyRole(ADMIN, MANAGER, MODERATOR)
+                .antMatchers(HttpMethod.GET, SCHEDULE)
+                .permitAll()
                 .anyRequest()
                 .authenticated();
         http.cors()
