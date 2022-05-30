@@ -3,7 +3,7 @@ spring:
     name: pegasus-backend
 
   profiles:
-    active: prod
+    active: dev
 
   sql:
     init:
