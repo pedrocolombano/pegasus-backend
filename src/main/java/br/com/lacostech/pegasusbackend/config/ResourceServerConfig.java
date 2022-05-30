@@ -29,6 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private static final String[] CATALOG_API = { "/categories/**", "/products/**" };
     private static final String[] BLOG_API = { "/posts/**", "/themes/**" };
     private static final String BREED_API = "/breeds/**";
+    private static final String PROCEEDING_API = "/proceedings/**";
 
     private static final String ADMIN = "ADMIN";
     private static final String MANAGER = "MANAGER";
@@ -74,10 +75,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .permitAll()
                 .antMatchers(BREED_API)
                 .hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.GET, PROCEEDING_API)
+                .permitAll()
+                .antMatchers(PROCEEDING_API)
+                .hasAnyRole(ADMIN, MANAGER)
                 .anyRequest()
                 .authenticated();
-        http.cors()
-                .configurationSource(getCorsConfigurationSource());
+
+        http.cors().configurationSource(getCorsConfigurationSource());
     }
 
     @Bean
