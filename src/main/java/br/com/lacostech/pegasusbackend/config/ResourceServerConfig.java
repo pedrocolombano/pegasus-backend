@@ -26,9 +26,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
     private static final String[] USER_API = { "/users/**" };
-    private static final String[] CATALOG = { "/categories/**", "/products/**" };
-    private static final String[] BLOG = { "/posts/**", "/themes/**" };
-    private static final String[] SCHEDULE = { "/breeds/**" };
+    private static final String[] CATALOG_API = { "/categories/**", "/products/**" };
+    private static final String[] BLOG_API = { "/posts/**", "/themes/**" };
+    private static final String BREED_API = "/breeds/**";
 
     private static final String ADMIN = "ADMIN";
     private static final String MANAGER = "MANAGER";
@@ -62,16 +62,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .permitAll()
                 .antMatchers(USER_API)
                 .authenticated()
-                .antMatchers(HttpMethod.GET, CATALOG)
+                .antMatchers(HttpMethod.GET, CATALOG_API)
                 .permitAll()
-                .antMatchers(CATALOG)
+                .antMatchers(CATALOG_API)
                 .hasAnyRole(ADMIN, MANAGER)
-                .antMatchers(HttpMethod.GET, BLOG)
+                .antMatchers(HttpMethod.GET, BLOG_API)
                 .permitAll()
-                .antMatchers(BLOG)
+                .antMatchers(BLOG_API)
                 .hasAnyRole(ADMIN, MANAGER, MODERATOR)
-                .antMatchers(HttpMethod.GET, SCHEDULE)
+                .antMatchers(HttpMethod.GET, BREED_API)
                 .permitAll()
+                .antMatchers(BREED_API)
+                .hasAnyRole(ADMIN, MANAGER)
                 .anyRequest()
                 .authenticated();
         http.cors()
