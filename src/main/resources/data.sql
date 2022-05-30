@@ -114,9 +114,13 @@ INSERT INTO tb_theme(name) VALUES ('Dicas');
 INSERT INTO tb_theme(name) VALUES ('Alimentação');
 
 
-INSERT INTO tb_post(title, main_image_url, summary, theme_id, author_id, created_at) VALUES ('Existe diferença entre boi e touro?',
-'https://www.petz.com.br/blog/wp-content/uploads/2022/05/diferenca-entre-boi-e-touro-interna-1.webp',
+INSERT INTO tb_post(title, summary, theme_id, author_id, created_at) VALUES ('Existe diferença entre boi e touro?',
 'Você já entrou em um debate sobre a diferença entre boi e touro? Um questionamento muito comum envolvendo os dois animais é se eles são a mesma coisa ou se apenas pertencem à mesma espécie, mas são animais diferentes. Afinal, qual será a resposta certa?', 4, 3, NOW());
+
+INSERT INTO tb_post_image(post_id, image) VALUES (1, 'https://www.petz.com.br/blog/wp-content/uploads/2022/05/diferenca-entre-boi-e-touro-interna-1.webp');
+INSERT INTO tb_post_image(post_id, image) VALUES (1, 'https://www.petz.com.br/blog/wp-content/uploads/2022/05/diferenca-entre-boi-e-touro-topo.webp');
+INSERT INTO tb_post_image(post_id, image) VALUES (1, 'https://www.petz.com.br/blog/wp-content/uploads/2022/05/diferenca-entre-boi-e-touro-interna-2.webp');
+
 
 INSERT INTO tb_article(subtitle, post_id) VALUES ('Por que tem gente que confunde boi e touro?', 1);
 INSERT INTO tb_article_paragraph(article_id, paragraph) VALUES (1, 'A confusão sobre boi e touro vem da nomenclatura. Normalmente, seres que possuem mais de um nome popular tendem a ser chamados por algum apelido e não por nomes tão simples, como os dois que citamos. Até quando são regionalismos é mais fácil perceber!');
