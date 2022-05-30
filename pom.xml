@@ -11,7 +11,7 @@
 
 	<groupId>br.com.lacostech</groupId>
 	<artifactId>pegasus-backend</artifactId>
-	<version>DEV</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>war</packaging>
 	<name>pegasus-backend</name>
