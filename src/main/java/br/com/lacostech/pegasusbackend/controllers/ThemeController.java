@@ -4,6 +4,7 @@ import br.com.lacostech.pegasusbackend.model.ThemeModel;
 import br.com.lacostech.pegasusbackend.services.ThemeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,12 @@ public class ThemeController {
     public ResponseEntity<ThemeModel> update(@PathVariable final Long id, @RequestBody final ThemeModel request) {
         ThemeModel response = themeService.update(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable final Long id) {
+        themeService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

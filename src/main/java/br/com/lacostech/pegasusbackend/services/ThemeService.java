@@ -3,8 +3,11 @@ package br.com.lacostech.pegasusbackend.services;
 import br.com.lacostech.pegasusbackend.model.ThemeModel;
 import br.com.lacostech.pegasusbackend.model.entities.Theme;
 import br.com.lacostech.pegasusbackend.repositories.ThemeRepository;
+import br.com.lacostech.pegasusbackend.services.exceptions.DatabaseException;
 import br.com.lacostech.pegasusbackend.services.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,16 @@ public class ThemeService {
 
         theme = themeRepository.save(theme);
         return new ThemeModel(theme);
+    }
+
+    public void deleteById(final Long id) {
+        try {
+            themeRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Theme id " + id + " not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Data integrity violation");
+        }
     }
 
     private void copyDataFromRequest(final ThemeModel request, final Theme entity) {
