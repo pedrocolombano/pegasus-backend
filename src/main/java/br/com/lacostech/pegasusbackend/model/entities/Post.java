@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,9 +38,6 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String mainImageUrl;
-
     @Column(nullable = false, length = 100)
     private String title;
 
@@ -55,6 +54,11 @@ public class Post implements Serializable {
 
     @OneToMany(mappedBy = "post")
     private final List<Article> articles = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "tb_post_image", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "image", nullable = false)
+    private final List<String> images = new ArrayList<>();
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
