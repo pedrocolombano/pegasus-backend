@@ -1,5 +1,6 @@
 package br.com.lacostech.pegasusbackend.model.responses;
 
+import br.com.lacostech.pegasusbackend.model.ThemeModel;
 import br.com.lacostech.pegasusbackend.model.entities.Post;
 import br.com.lacostech.pegasusbackend.util.Randomizer;
 import lombok.AllArgsConstructor;
@@ -24,14 +25,14 @@ public class PostResponse implements Serializable {
     private String mainImage;
     private String title;
     private String summary;
-    private ThemeResponse theme;
+    private ThemeModel theme;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public PostResponse(final Post entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
-            this.theme = new ThemeResponse(entity.getTheme());
+            this.theme = new ThemeModel(entity.getTheme());
             this.mainImage = Randomizer.getRandomValueFromList(entity.getImages());
         }
     }

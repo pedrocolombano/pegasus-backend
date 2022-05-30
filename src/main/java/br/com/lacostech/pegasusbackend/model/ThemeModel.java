@@ -1,4 +1,4 @@
-package br.com.lacostech.pegasusbackend.model.responses;
+package br.com.lacostech.pegasusbackend.model;
 
 import br.com.lacostech.pegasusbackend.model.entities.Theme;
 import lombok.AllArgsConstructor;
@@ -14,14 +14,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ThemeResponse implements Serializable {
+public class ThemeModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;
 
-    public ThemeResponse(final Theme entity) {
+    public ThemeModel(final Theme entity) {
         if (Objects.nonNull(entity)) {
             BeanUtils.copyProperties(entity, this);
         }
