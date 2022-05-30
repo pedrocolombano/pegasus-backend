@@ -230,6 +230,6 @@ INSERT INTO tb_breed (name, pet_type) VALUES ('Sem raça definida', 'CAT');
 
 
 INSERT INTO tb_schedule (schedule, pet_name, breed_id, proceeding_id, client_id, pet_size) VALUES ('2022-06-26 13:00:00', 'Dogue', 1, 1, 3, 'BIG');
-INSERT INTO tb_schedule (schedule, pet_name, breed_id, proceeding_id, client_id, pet_size) VALUES ('2022-06-26 13:00:00', 'Doguinho', 2, 5, 3, 'BIG');
+INSERT INTO tb_schedule (schedule, pet_name, breed_id, proceeding_id, client_id, pet_size) VALUES ('2022-06-21 13:00:00', 'Doguinho', 2, 5, 3, 'BIG');
 INSERT INTO tb_schedule (schedule, pet_name, breed_id, proceeding_id, client_id, pet_size) VALUES ('2022-06-12 15:00:00', 'Catioro', 8, 1, 4, 'SMALL');
 INSERT INTO tb_schedule (schedule, pet_name, breed_id, proceeding_id, client_id, pet_size) VALUES ('2022-06-03 12:00:00', 'Catioro', 8, 3, 4, 'SMALL');
