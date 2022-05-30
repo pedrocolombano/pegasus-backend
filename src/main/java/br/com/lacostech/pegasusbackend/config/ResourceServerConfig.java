@@ -27,9 +27,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
     private static final String[] USER_API = { "/users/**" };
     private static final String[] CATALOG = { "/categories/**", "/products/**" };
+    private static final String[] BLOG = { "/posts/**" };
 
     private static final String ADMIN = "ADMIN";
     private static final String MANAGER = "MANAGER";
+    private static final String MODERATOR = "MODERATOR";
 
     @Value("${spring.profiles.active}")
     private String profile;
@@ -63,6 +65,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .permitAll()
                 .antMatchers(CATALOG)
                 .hasAnyRole(ADMIN, MANAGER)
+                .antMatchers(HttpMethod.GET, BLOG)
+                .permitAll()
+                .antMatchers(BLOG)
+                .hasAnyRole(ADMIN, MANAGER, MODERATOR)
                 .anyRequest()
                 .authenticated();
         http.cors()
