@@ -3,7 +3,7 @@ spring:
     name: pegasus-backend
 
   profiles:
-    active: dev
+    active: ${APP_PROFILE:test}
 
   sql:
     init:
